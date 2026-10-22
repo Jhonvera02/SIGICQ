@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGICQ - Sistema Inteligente de Gestión de Inventarios, Compras y Abastecimiento</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Pantalla de Inicio de Sesión (Login) -->
+    <div class="login-overlay" id="login-screen">
+        <div class="login-card">
+            <div class="login-brand">
+                <div class="brand-logo">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h2>SIGICQ</h2>
+                <span>Gestión Inteligente de Inventarios</span>
+            </div>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-username">Usuario / Área</label>
+                    <input type="text" class="form-control" id="login-username" placeholder="ej. produccion, compras" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <input type="password" class="form-control" id="login-password" value="123" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;">
+                    Iniciar Sesión
+                </button>
+            </form>
+
+            <!-- Credenciales rápidas para demostración -->
+            <div class="login-help">
+                <h4>Credenciales de Prueba (Clave: 123)</h4>
+                <div class="credential-tags">
+                    <span class="cred-tag" onclick="fillCreds('produccion')">produccion</span>
+                    <span class="cred-tag" onclick="fillCreds('logistica')">logistica</span>
+                    <span class="cred-tag" onclick="fillCreds('comercial')">comercial</span>
+                    <span class="cred-tag" onclick="fillCreds('mantenimiento')">mantenimiento</span>
+                    <span class="cred-tag" onclick="fillCreds('compras')">compras</span>
+                    <span class="cred-tag" onclick="fillCreds('gerente')">gerente</span>
+                    <span class="cred-tag" onclick="fillCreds('sistemas')" style="background-color: var(--accent-light); color: var(--accent-color);">sistemas</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor Principal de la Aplicación -->
+    <div class="app-container hidden" id="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <div class="brand-info">
+                    <h1>SIGICQ</h1>
+                    <span>Gestión Inteligente</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-item active" data-view="dashboard" id="btn-nav-dashboard">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-view="inventory" id="btn-nav-inventory">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    <span>Inventario</span>
+                </button>
+                <button class="nav-item" data-view="requests" id="btn-nav-requests">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Solicitudes</span>
+                </button>
+                <button class="nav-item" data-view="containers" id="btn-nav-containers">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v10a7 7 0 0 0 7 7z"></path><path d="M6 8h12"></path></svg>
+                    <span>Sugeridos Envases</span>
+                </button>
+                <button class="nav-item" data-view="approvals" id="btn-nav-approvals">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    <span>Aprobaciones</span>
+                    <span class="badge badge-approval-count hidden" id="badge-approvals">0</span>
+                </button>
+                <!-- Nuevo Módulo de Órdenes de Compra -->
+                <button class="nav-item" data-view="purchase_orders" id="btn-nav-purchase_orders">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    <span>Órdenes de Compra</span>
+                    <span class="badge badge-pulse hidden" id="badge-purchase-orders" style="background-color: var(--info);">0</span>
+                </button>
+                <!-- Nuevo Módulo de Control de Precios -->
+                <button class="nav-item" data-view="price_control" id="btn-nav-price_control">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    <span>Control de Precios</span>
+                </button>
+                <button class="nav-item" data-view="alerts" id="btn-nav-alerts">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    <span>Alertas</span>
+                    <span class="badge badge-alert-count" id="badge-alerts-sidebar">0</span>
+                </button>
+                <button class="nav-item" data-view="history" id="btn-nav-history">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline><path d="M12 2a10 10 0 0 0-10 10c0 1 .1 2 .3 3l-1.3.7c-.1-.7-.2-1.4-.2-2.1"></path></svg>
+                    <span>Historial y Trazabilidad</span>
+                </button>
+                <button class="nav-item hidden" data-view="systems" id="btn-nav-systems">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>Sistemas</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile" style="flex-direction: column; align-items: flex-start; gap: 4px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="avatar" id="current-avatar">U</div>
+                        <div class="user-details">
+                            <span class="user-name" id="current-user-name">Usuario Demo</span>
+                            <span class="user-role" id="current-user-role-label">Jefe de Área</span>
+                        </div>
+                    </div>
+                    <button class="btn-text" id="btn-logout" style="color: var(--danger); margin-top: 12px; display: flex; align-items: center; gap: 6px; padding: 4px 8px; background-color: var(--danger-light); border-radius: var(--border-radius-sm); font-size: 0.8rem; width: 100%; justify-content: center;">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="main-layout">
+            <!-- Header / Top Bar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <h2 id="page-title">Dashboard</h2>
+                </div>
+                <div class="topbar-right">
+                    <!-- Indicador del Rol Actual -->
+                    <div class="role-indicator-badge" id="role-display-badge" style="background-color: var(--accent-light); border: 1px solid rgba(0, 180, 216, 0.15); color: var(--accent-color); padding: 6px 14px; border-radius: var(--border-radius-sm); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Área: Producción
+                    </div>
+
+                    <!-- Botón de Modo Oscuro/Claro -->
+                    <button class="btn-icon" id="theme-toggle" title="Cambiar Tema">
+                        <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Alertas Rápidas -->
+                    <div class="notifications-container">
+                        <button class="btn-icon position-relative" id="btn-notifications">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                            <span class="badge badge-pulse" id="badge-alerts-top">0</span>
+                        </button>
+                        <div class="notifications-dropdown" id="notifications-dropdown">
+                            <div class="notifications-header">
+                                <h3>Alertas Críticas</h3>
+                                <button class="btn-text" id="btn-clear-notifications">Limpiar</button>
+                            </div>
+                            <div class="notifications-list" id="notifications-dropdown-list">
+                                <!-- Se llena dinámicamente -->
+                                <p class="empty-state">No hay alertas críticas pendientes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dynamic Viewport -->
+            <main class="content-viewport" id="main-viewport">
+                <!-- El contenido se inyectará dinámicamente -->
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal para Detalles y Trazabilidad -->
+    <div class="modal-overlay" id="detail-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="modal-title">Detalle de Solicitud</h3>
+                <button class="modal-close" id="btn-modal-close">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-content">
+                <!-- Se llena dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Función auxiliar inline para rellenar campos de login en la demo
+        function fillCreds(user) {
+            document.getElementById('login-username').value = user;
+            document.getElementById('login-password').value = '123';
+        }
+    </script>
+    <script src="charts.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
